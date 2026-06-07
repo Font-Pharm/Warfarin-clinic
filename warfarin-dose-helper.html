@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ระบบช่วยปรับขนาดยาวาร์ฟาริน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-900:#0f3d2e; --green-800:#16513c; --green-700:#1c6b4f; --green-600:#218564;
+    --green-500:#2aa07a; --green-400:#46b894; --green-300:#86d6bd; --green-100:#dcf2e9; --green-50:#eef9f4;
+    --ink:#15211d; --muted:#586a64; --line:#dfe9e4; --paper:#fff; --bg:#f4f9f6;
+    --t2:#f2932e; --t2-bg:#ffe0b8; --t2-tx:#8a4c0c;
+    --t3:#3a9bd6; --t3-bg:#c6e6f8; --t3-tx:#155382;
+    --t5:#e8729e; --t5-bg:#f9cbdd; --t5-tx:#9c3760;
+    --warn:#c0492b; --warn-bg:#fbe9e4; --amber:#a9690f; --amber-bg:#fcf2dd;
+    --shadow:0 1px 2px rgba(15,61,46,.04),0 8px 24px rgba(15,61,46,.06);
+    --shadow-lg:0 12px 40px rgba(15,61,46,.12); --r:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Sarabun',sans-serif;font-size:16px;
+    background:radial-gradient(1200px 500px at 100% -10%,#e7f6ef 0%,transparent 60%),radial-gradient(900px 500px at -10% 0%,#e9f7f0 0%,transparent 55%),var(--bg);
+    color:var(--ink);line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:550px;margin:0 auto;padding:0 16px 60px}
+  header{position:sticky;top:0;z-index:30;margin:0 -16px 18px;padding:15px 20px;
+    background:linear-gradient(135deg,var(--green-800),var(--green-600));color:#fff;
+    box-shadow:0 6px 22px rgba(15,61,46,.22);overflow:hidden}
+  header::after{content:"";position:absolute;right:-40px;top:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%)}
+  .brand{display:flex;align-items:center;gap:12px;position:relative}
+  .logo{width:44px;height:44px;border-radius:12px;flex:none;background:rgba(255,255,255,.14);display:grid;place-items:center;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.22)}
+  .brand h1{font-size:1.12rem;margin:0;font-weight:700;letter-spacing:.2px}
+  .brand p{margin:1px 0 0;font-size:.8rem;opacity:.85;font-weight:300}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px;margin-bottom:16px}
+  .card-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .card-head .ic{width:36px;height:36px;border-radius:10px;flex:none;background:var(--green-50);color:var(--green-700);display:grid;place-items:center}
+  .card-head h2{font-size:1.08rem;margin:0;font-weight:700}
+  .card-head span{font-size:.82rem;color:var(--muted);display:block;font-weight:400}
+  label{display:block;font-size:.92rem;font-weight:700;margin:0 0 7px;color:var(--green-900)}
+  .hint{font-size:.8rem;color:var(--muted);font-weight:400}
+  .field{margin-bottom:16px}
+  input[type=number]{width:100%;font-family:inherit;font-size:1.2rem;font-weight:700;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--green-50);color:var(--ink);transition:.18s}
+  input[type=number]:focus{outline:none;border-color:var(--green-500);background:#fff;box-shadow:0 0 0 4px rgba(42,160,122,.12)}
+  .with-unit{position:relative}
+  .with-unit .unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:.86rem;color:var(--muted);font-weight:500;pointer-events:none}
+  .seg{display:flex;gap:8px;flex-wrap:wrap}
+  .seg button{flex:1;min-width:130px;font-family:inherit;font-size:.94rem;font-weight:700;padding:11px 8px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--muted);cursor:pointer;transition:.16s}
+  .seg button .sub{display:block;font-size:.74rem;font-weight:400;margin-top:1px}
+  .seg button.active{background:var(--green-700);border-color:var(--green-700);color:#fff;box-shadow:0 6px 16px rgba(28,107,79,.28)}
+  .btn{width:100%;font-family:inherit;font-size:1.05rem;font-weight:700;padding:16px;border:none;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,var(--green-700),var(--green-500));color:#fff;box-shadow:0 10px 26px rgba(33,133,100,.32);transition:.16s;display:flex;align-items:center;justify-content:center;gap:9px}
+  .btn:active{transform:translateY(1px)}
+  .bleed{display:flex;align-items:flex-start;gap:11px;padding:13px 14px;border-radius:12px;background:var(--warn-bg);border:1.5px solid #f3cfc5;cursor:pointer}
+  .bleed input{width:21px;height:21px;margin-top:2px;accent-color:var(--warn);flex:none}
+  .bleed .t{font-size:.92rem;font-weight:700;color:var(--warn)}
+  .bleed .t small{display:block;font-weight:400;font-size:.78rem;color:#a85a47}
+
+  /* details: คำอธิบาย major bleeding */
+  details.info{margin-top:11px;border:1px solid #f0dca6;border-radius:12px;background:var(--amber-bg);overflow:hidden}
+  details.info summary{cursor:pointer;padding:12px 14px;font-size:.86rem;font-weight:700;color:var(--amber);list-style:none;display:flex;align-items:center;gap:8px}
+  details.info summary::-webkit-details-marker{display:none}
+  details.info summary .tw{flex:1}
+  details.info summary .arr{transition:.2s;font-size:.8rem}
+  details.info[open] summary .arr{transform:rotate(180deg)}
+  details.info .body{padding:0 15px 14px;font-size:.85rem;color:#5e4711;line-height:1.7}
+  details.info .body p{margin:8px 0 6px}
+  details.info .body ul{margin:6px 0;padding-left:20px}
+  details.info .body li{margin-bottom:5px}
+  details.info .body .src{font-size:.76rem;color:#8a6d28;margin-top:8px;font-style:italic}
+
+  /* กล่องตรวจสอบ */
+  .msgbox{border-radius:13px;padding:13px 15px;margin-bottom:16px;display:flex;gap:11px;font-size:.9rem;align-items:flex-start;line-height:1.6}
+  .msgbox svg{flex:none;margin-top:2px}
+  .msgbox.err{background:var(--warn-bg);border:1.5px solid #f0c0b3;color:#8d2f1c}
+  .msgbox.warn{background:var(--amber-bg);border:1.5px solid #f0dca6;color:#7a5210}
+  .msgbox b{font-weight:700}
+  .msgbox ul{margin:5px 0 0;padding-left:18px} .msgbox li{margin-bottom:3px}
+
+  #result{display:none}
+  #result.show{display:block;animation:rise .4s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .verdict{border-radius:var(--r);padding:18px 20px;margin-bottom:16px;color:#fff;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+  .verdict::after{content:"";position:absolute;right:-30px;bottom:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.1)}
+  .verdict .tag{font-size:.78rem;font-weight:600;opacity:.92;letter-spacing:.3px}
+  .verdict .big{font-size:1.55rem;font-weight:800;margin:3px 0 5px;line-height:1.2}
+  .verdict .desc{font-size:.92rem;opacity:.96;font-weight:300;position:relative}
+  .v-up{background:linear-gradient(135deg,#1c6b4f,#2aa07a)}
+  .v-keep{background:linear-gradient(135deg,#2a7d8c,#46b894)}
+  .v-down{background:linear-gradient(135deg,#a9690f,#e0a93f)}
+  .v-hold{background:linear-gradient(135deg,#9c4a1f,#d2742f)}
+  .v-stop{background:linear-gradient(135deg,#8d2f1c,#c0492b)}
+
+  /* แท็บเลือกขนาดยา */
+  .dose-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+  .dtab{flex:1;min-width:100px;font-family:inherit;font-size:1rem;font-weight:800;padding:11px 8px;border:1.5px solid var(--line);border-radius:13px;background:#fff;color:var(--ink);cursor:pointer;position:relative;transition:.16s}
+  .dtab small{display:block;font-size:.76rem;font-weight:600;margin-top:1px;color:var(--muted)}
+  .dtab.active{background:var(--green-700);border-color:var(--green-700);color:#fff}
+  .dtab.active small{color:rgba(255,255,255,.85)}
+  .dtab .star{position:absolute;top:-8px;right:-4px;background:var(--amber);color:#fff;font-size:.62rem;padding:1px 7px;border-radius:10px;font-weight:700;box-shadow:0 2px 5px rgba(0,0,0,.15)}
+
+  .doseline{display:flex;align-items:center;gap:10px;justify-content:center;padding:16px;background:var(--green-50);border-radius:14px;margin-bottom:10px}
+  .doseline .from{text-align:center}
+  .doseline .from .n{font-size:1.1rem;font-weight:700;color:var(--muted);text-decoration:line-through}
+  .doseline .from .l{font-size:.7rem;color:var(--muted)}
+  .doseline .arrow{color:var(--green-500);font-size:1.4rem}
+  .doseline .to{text-align:center}
+  .doseline .to .n{font-size:2rem;font-weight:800;color:var(--green-700);line-height:1}
+  .doseline .to .l{font-size:.74rem;color:var(--muted);margin-top:2px}
+  .pctbar{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+  .pctchip{font-size:1rem;font-weight:800;padding:4px 14px;border-radius:20px}
+  .pctchip.up{background:var(--green-100);color:var(--green-700)}
+  .pctchip.down{background:var(--amber-bg);color:var(--amber)}
+  .pctchip.keep{background:#e2eef0;color:#2a7d8c}
+  .pctnote{font-size:.8rem;color:var(--muted)}
+
+  .tab{position:relative;display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;
+    font-size:.64rem;font-weight:800;border:1.5px solid;
+    box-shadow:inset 0 1.5px 1px rgba(255,255,255,.7),0 1px 2px rgba(0,0,0,.16);flex:none}
+  .tab::before{content:"";position:absolute;top:2.5px;left:4.5px;width:7px;height:4.5px;border-radius:50%;background:rgba(255,255,255,.5)}
+  .tab.t2{background:var(--t2-bg);border-color:var(--t2);color:var(--t2-tx)}
+  .tab.t3{background:var(--t3-bg);border-color:var(--t3);color:var(--t3-tx)}
+  .tab.t5{background:var(--t5-bg);border-color:var(--t5);color:var(--t5-tx)}
+  .tab.half{overflow:hidden}
+  .tab.t2.half{background:linear-gradient(90deg,var(--t2-bg) 0 50%,#fcfdfc 50% 100%)}
+  .tab.t3.half{background:linear-gradient(90deg,var(--t3-bg) 0 50%,#fcfdfc 50% 100%)}
+  .tab.t5.half{background:linear-gradient(90deg,var(--t5-bg) 0 50%,#fcfdfc 50% 100%)}
+  .tab.half::after{content:"";position:absolute;left:50%;top:2px;bottom:2px;width:1.5px;background:currentColor;opacity:.3;transform:translateX(-50%)}
+  .tab .hf{position:absolute;top:-5px;right:-4px;font-size:.54rem;background:var(--ink);color:#fff;border-radius:50%;width:12px;height:12px;display:grid;place-items:center;font-style:normal;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+
+  .legend{display:flex;gap:9px;margin:14px 0 4px;flex-wrap:wrap;justify-content:center}
+  .legend .pl{display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;color:var(--muted)}
+
+  .opt{border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-bottom:13px;background:#fff;transition:.18s}
+  .opt.best{border-color:var(--green-300);box-shadow:0 8px 22px rgba(33,133,100,.12)}
+  .opt-head{display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap}
+  .onum{width:27px;height:27px;border-radius:8px;flex:none;display:grid;place-items:center;font-weight:800;font-size:.92rem;background:var(--green-700);color:#fff}
+  .opt.alt .onum{background:var(--muted)}
+  .otitle{font-size:.96rem;font-weight:700;color:var(--green-900);flex:1;min-width:90px}
+  .badge{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+  .b-full{background:var(--green-100);color:var(--green-700)}
+  .b-half{background:var(--amber-bg);color:var(--amber)}
+  .b-best{background:var(--green-700);color:#fff}
+
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+  .day{border:1px solid var(--line);border-radius:11px;padding:7px 2px;text-align:center;background:#fcfdfc;display:flex;flex-direction:column;align-items:center}
+  .day .dn{font-size:.66rem;color:var(--muted);font-weight:700;margin-bottom:6px}
+  .day .tabs{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:56px;justify-content:center;flex:1}
+  .day .skip{font-size:.68rem;color:var(--muted);font-weight:600}
+  .day .dt{font-size:.7rem;font-weight:800;color:var(--green-800);margin-top:6px;padding-top:5px;border-top:1px dashed var(--line);width:100%}
+
+  .supply{margin-top:13px;border-top:1px solid var(--line);padding-top:11px;display:flex;flex-direction:column;gap:8px}
+  .sup-row{display:flex;align-items:center;gap:10px}
+  .sup-row .nm{font-size:.86rem;font-weight:600;color:var(--ink);flex:1}
+  .sup-row .cnt{font-size:.88rem;font-weight:800;color:var(--green-700)}
+  .sup-row .cnt small{font-weight:400;color:var(--muted);font-size:.76rem}
+
+  .clin{border-radius:14px;padding:14px 16px;margin-top:14px;font-size:.9rem;background:var(--green-50);border:1px solid var(--green-100)}
+  .clin.warn{background:var(--warn-bg);border-color:#f3cfc5} .clin.amber{background:var(--amber-bg);border-color:#f0dca6}
+  .clin h3{font-size:.9rem;margin:0 0 8px;font-weight:700;display:flex;align-items:center;gap:7px;color:var(--green-800)}
+  .clin.warn h3{color:var(--warn)} .clin.amber h3{color:var(--amber)}
+  .clin ul{margin:0;padding-left:19px} .clin li{margin-bottom:5px} .clin li:last-child{margin-bottom:0}
+  .followup .ic{color:var(--green-600);flex:none}
+  .note{font-size:.82rem;color:var(--muted);margin-top:10px;text-align:center;font-weight:400}
+  .note b{color:var(--green-700);font-weight:700}
+  .causes .ct{font-size:.88rem;font-weight:700;color:var(--green-800);margin-bottom:9px}
+  .chip-wrap{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-size:.8rem;background:#fff;border:1px solid var(--line);border-radius:20px;padding:5px 11px;color:var(--muted)}
+  footer{text-align:center;font-size:.78rem;color:var(--muted);margin-top:22px;font-weight:300;line-height:1.7}
+  footer b{color:var(--green-700);font-weight:600}
+  .disclaimer{background:var(--amber-bg);border:1px solid #f0dca6;border-radius:13px;padding:12px 14px;font-size:.82rem;color:#7a5210;margin-bottom:16px;display:flex;gap:9px;line-height:1.6}
+  .disclaimer svg{flex:none;margin-top:1px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 11c0 5.65-7 10-7 10z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M5.5 12h3l1.5-3 2 6 1.5-3h3.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><h1>Warfarin Dose Helper</h1><p>ระบบช่วยปรับขนาดยาต้านการแข็งตัวของเลือด</p></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="disclaimer">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 3h.01M10.3 3.9 2.4 17.5A2 2 0 0 0 4.1 20.5h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" stroke="#b8860b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>เครื่องมือนี้เป็น<b>ตัวช่วยตัดสินใจ</b> อ้างอิงแนวทางสมาคมแพทย์โรคหัวใจฯ ผลลัพธ์ต้องผ่านการพิจารณาของแพทย์ และต้องหาสาเหตุที่ทำให้ INR ผิดปกติก่อนปรับยาเสมอ</span>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div><h2>ข้อมูลผู้ป่วย</h2><span>กรอกค่าปัจจุบันเพื่อคำนวณ</span></div>
+    </div>
+    <div class="field">
+      <label>ค่า INR ปัจจุบัน</label>
+      <div class="with-unit"><input type="number" id="inr" step="0.1" min="0" max="20" placeholder="เช่น 1.7" inputmode="decimal"></div>
+    </div>
+    <div class="field">
+      <label>ขนาดยาวาร์ฟารินเดิม <span class="hint">(รวมทั้งสัปดาห์)</span></label>
+      <div class="with-unit"><input type="number" id="weekly" step="0.5" min="0" placeholder="เช่น 21" inputmode="decimal"><span class="unit">มก./สัปดาห์</span></div>
+      <div class="hint" style="margin-top:6px">ไม่ทราบขนาดต่อสัปดาห์? ใส่ขนาดต่อวัน × 7 (เช่น 3 มก./วัน = 21)</div>
+    </div>
+    <div class="field">
+      <label>เป้าหมาย INR</label>
+      <div class="seg" id="targetSeg">
+        <button type="button" data-lo="2.0" data-hi="3.0" class="active">2.0 – 3.0<span class="sub">ข้อบ่งชี้ทั่วไป</span></button>
+        <button type="button" data-lo="2.5" data-hi="3.5">2.5 – 3.5<span class="sub">ลิ้นหัวใจเทียมเสี่ยงสูง</span></button>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:18px">
+      <label class="bleed" id="bleedToggle">
+        <input type="checkbox" id="bleed">
+        <span class="t">มีภาวะเลือดออกรุนแรง (Major bleeding)<small>เลือดออกในสมอง / ต้องให้เลือด / คุกคามชีวิต</small></span>
+      </label>
+      <details class="info">
+        <summary><span class="tw">ภาวะเลือดออกรุนแรงคืออะไร? มีเกณฑ์อย่างไร</span><span class="arr">▾</span></summary>
+        <div class="body">
+          <p><b>ภาวะเลือดออกรุนแรง (Major bleeding)</b> หมายถึงภาวะเลือดออกที่เข้าเกณฑ์<b>ข้อใดข้อหนึ่ง</b>ต่อไปนี้:</p>
+          <ul>
+            <li><b>เลือดออกจนเสียชีวิต</b> (fatal bleeding)</li>
+            <li><b>เลือดออกในอวัยวะหรือตำแหน่งสำคัญ</b> เช่น ในสมอง/กะโหลกศีรษะ (intracranial), ไขสันหลัง (intraspinal), ในลูกตา (intraocular), หลังเยื่อบุช่องท้อง (retroperitoneal), เยื่อหุ้มหัวใจ (pericardial), ในข้อ (intra-articular) หรือในกล้ามเนื้อจนเกิด compartment syndrome</li>
+            <li><b>ฮีโมโกลบิน (Hb) ลดลง ≥ 2 ก./ดล.</b> จากการเสียเลือด</li>
+            <li><b>ต้องให้เลือดทดแทน ≥ 2 ยูนิต</b> (เม็ดเลือดแดงหรือเลือดรวม)</li>
+            <li><b>เลือดออกจนความดันโลหิตตก/ช็อก</b> หรือต้อง<b>ผ่าตัด/ทำหัตถการ</b>เพื่อหยุดเลือด</li>
+          </ul>
+          <p>หากเข้าเกณฑ์ข้างต้น ให้ติ๊กช่องด้านบนเพื่อดูแนวทางแก้ไขภาวะฉุกเฉิน — กรณีเลือดออกไม่รุนแรง (minor) ให้พิจารณาปรับยาตามค่า INR ตามปกติ</p>
+          <div class="src">อ้างอิงนิยามตาม ISTH (International Society on Thrombosis and Haemostasis)</div>
+        </div>
+      </details>
+    </div>
+    <button class="btn" id="calcBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M8 6h8M8 10h2m3 0h3M8 14h2m3 0h3M8 18h2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+      คำนวณคำแนะนำ
+    </button>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<footer>
+  อ้างอิง: <b>แนวทางการรักษาผู้ป่วยด้วยยาต้านการแข็งตัวของเลือดชนิดรับประทาน</b><br>
+  สมาคมแพทย์โรคหัวใจแห่งประเทศไทย ในพระบรมราชูปถัมภ์ (ตารางที่ 3)<br>
+  &amp; AHA/ACC Guide to Warfarin Therapy, 2003
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  function buildDoseMap(maxDaily){
+    var best={};
+    for(var f2=0;f2<=6;f2++)for(var f3=0;f3<=6;f3++)for(var f5=0;f5<=6;f5++)
+    for(var h2=0;h2<=1;h2++)for(var h3=0;h3<=1;h3++)for(var h5=0;h5<=1;h5++){
+      var dose=f2*2+f3*3+f5*5+h2*1+h3*1.5+h5*2.5;
+      if(dose<0||dose>maxDaily)continue;
+      var count=f2+f3+f5+h2+h3+h5;
+      var usesHalf=(h2+h3+h5)>0;
+      var key=dose.toFixed(1);
+      var cand={dose:dose,count:count,usesHalf:usesHalf,f2:f2,f3:f3,f5:f5,h2:h2,h3:h3,h5:h5};
+      var cur=best[key];
+      if(!cur){best[key]=cand;continue;}
+      var cu=cand.usesHalf?1:0, ru=cur.usesHalf?1:0;
+      if(cu<ru) best[key]=cand;
+      else if(cu===ru && count<cur.count) best[key]=cand;
+    }
+    best["0.0"]={dose:0,count:0,usesHalf:false,f2:0,f3:0,f5:0,h2:0,h3:0,h5:0};
+    return best;
+  }
+  var DMAP=buildDoseMap(14);
+
+  function enumPlans(W){
+    if(W<=0) return [];
+    var avg=W/7, vals=[], k;
+    for(k in DMAP){
+      var d=DMAP[k].dose;
+      if(d===0){ if(avg<2) vals.push(0); continue; }
+      if(d>=avg-2-1e-9 && d<=avg+2+1e-9) vals.push(d);
+    }
+    vals.sort(function(a,b){return a-b;});
+    if(!vals.length){
+      var bestd=null,bd=1e9;
+      for(k in DMAP){var dd=DMAP[k].dose;if(dd>0&&Math.abs(dd-avg)<bd){bd=Math.abs(dd-avg);bestd=dd;}}
+      vals=[bestd];
+    }
+    var out=[], maxV=vals[vals.length-1];
+    function rec(start,chosen,sum,remain){
+      if(remain===0){ if(Math.abs(sum-W)<0.01) out.push(chosen.slice()); return; }
+      for(var i=start;i<vals.length;i++){
+        var v=vals[i];
+        if(sum+v*remain > W+0.01) break;
+        if(sum+maxV*remain < W-0.01) continue;
+        chosen.push(v); rec(i,chosen,sum+v,remain-1); chosen.pop();
+      }
+    }
+    rec(0,[],0,7);
+    return out.map(function(ms){
+      var usesHalf=false,tablets=0,dset={};
+      ms.forEach(function(d){var c=DMAP[d.toFixed(1)];if(c.usesHalf)usesHalf=true;tablets+=c.count;dset[d.toFixed(1)]=1;});
+      return {ms:ms,usesHalf:usesHalf,tablets:tablets,
+        zero:ms.filter(function(d){return d===0;}).length,
+        spread:ms[ms.length-1]-ms[0],
+        distinct:Object.keys(dset).length,
+        sum:ms.reduce(function(a,b){return a+b;},0)};
+    });
+  }
+  function keyOf(p){return p.ms.map(function(x){return x.toFixed(1);}).join(',');}
+
+  function pick3(W){
+    var plans=enumPlans(W);
+    if(!plans.length) return [];
+    var res=[],used={};
+    function add(sorted){for(var i=0;i<sorted.length;i++){var kk=keyOf(sorted[i]);if(!used[kk]){used[kk]=1;res.push(sorted[i]);return true;}}return false;}
+    var c=function(){var f=arguments;return function(a,b){for(var i=0;i<f.length;i++){var v=f[i](a,b);if(v)return v;}return 0;};};
+    var byZero=function(a,b){return a.zero-b.zero;}, byHalf=function(a,b){return (a.usesHalf?1:0)-(b.usesHalf?1:0);},
+        bySpread=function(a,b){return a.spread-b.spread;}, byTab=function(a,b){return a.tablets-b.tablets;};
+    add(plans.slice().sort(c(byZero,byHalf,bySpread,byTab)));
+    add(plans.slice().sort(c(byZero,byHalf,byTab,bySpread)));
+    var uni=plans.filter(function(p){return p.distinct===1&&p.zero===0;}).sort(c(byHalf,byTab));
+    if(!add(uni)) add(plans.slice().sort(c(byZero,byHalf,bySpread,byTab)));
+    add(plans.slice().sort(c(byZero,byHalf,byTab)));
+    return res.slice(0,3);
+  }
+
+  function arrange(ms){
+    var n=ms.length, desc=ms.slice().sort(function(a,b){return b-a;}), out=new Array(n), order=[],i;
+    for(i=0;i<n;i+=2) order.push(i);
+    for(i=1;i<n;i+=2) order.push(i);
+    for(i=0;i<n;i++) out[order[i]]=desc[i];
+    return out;
+  }
+
+  /* คืนหลายขนาดยา (จำนวนเต็มในเกณฑ์ สูงสุด 3) */
+  function recommendDoses(weekly, dir, loPct, hiPct){
+    if(dir===0) return [{target:weekly, pct:0, recommended:true}];
+    var lP=loPct, hP=hiPct;
+    if(lP===hP){ lP=Math.max(0,lP-3); hP=hP+3; }
+    var a=weekly*(1+dir*lP/100), b=weekly*(1+dir*hP/100);
+    var lo=Math.min(a,b), hi=Math.max(a,b);
+    var mid=weekly*(1+dir*(loPct+hiPct)/2/100);
+    var ints=[],n;
+    for(n=Math.ceil(lo-1e-9); n<=Math.floor(hi+1e-9); n++) if(n>0) ints.push(n);
+    if(!ints.length){
+      for(var h=Math.ceil(lo*2-1e-9); h<=Math.floor(hi*2+1e-9); h++){var vv=h/2; if(vv>0) ints.push(vv);}
+      if(!ints.length) ints=[Math.round(mid*2)/2];
+    }
+    var chosen;
+    if(ints.length<=3) chosen=ints.slice();
+    else{
+      var midI=ints.reduce(function(x,y){return Math.abs(y-mid)<Math.abs(x-mid)?y:x;});
+      var set={}; set[ints[0]]=1; set[midI]=1; set[ints[ints.length-1]]=1;
+      chosen=Object.keys(set).map(Number).sort(function(a,b){return a-b;});
+    }
+    var recI=chosen.reduce(function(x,y){return Math.abs(y-mid)<Math.abs(x-mid)?y:x;});
+    return chosen.map(function(t){return {target:t, pct:(t-weekly)/weekly*100, recommended:(t===recI)};});
+  }
+
+  /* ===== ตรวจสอบความถูกต้อง ===== */
+  function validateInputs(inr, weekly, bleed){
+    var errors=[], warnings=[];
+    if(isNaN(inr)) errors.push('กรุณากรอกค่า INR');
+    else if(inr<=0) errors.push('ค่า INR ต้องมากกว่า 0');
+    else if(inr>20) warnings.push('ค่า INR ที่กรอก ('+fmt(inr)+') สูงผิดปกติมาก โปรดตรวจสอบความถูกต้องอีกครั้ง');
+    if(!bleed){
+      if(isNaN(weekly)) errors.push('กรุณากรอกขนาดยาเดิมต่อสัปดาห์');
+      else if(weekly<=0) errors.push('ขนาดยาต้องมากกว่า 0');
+      else if(weekly>140) warnings.push('ขนาดยา ('+fmt(weekly)+' มก./สัปดาห์ ≈ '+fmt(weekly/7)+' มก./วัน) สูงผิดปกติ โปรดตรวจสอบ');
+      else if(weekly<7) warnings.push('ขนาดยา ('+fmt(weekly)+' มก./สัปดาห์ ≈ '+fmt(weekly/7)+' มก./วัน) ต่ำผิดปกติ โปรดตรวจสอบ');
+    }
+    return {ok:errors.length===0, errors:errors, warnings:warnings};
+  }
+  /* ตรวจว่าทุกแผนรวมเม็ด=ขนาดวัน และรวมสัปดาห์=เป้าหมาย */
+  function verifyDosing(target, options){
+    if(!options || !options.length) return false;
+    for(var i=0;i<options.length;i++){
+      var p=options[i], sum=0;
+      for(var j=0;j<p.ms.length;j++){
+        var d=p.ms[j], c=DMAP[d.toFixed(1)];
+        if(!c) return false;
+        var td=c.f2*2+c.f3*3+c.f5*5+c.h2*1+c.h3*1.5+c.h5*2.5;
+        if(Math.abs(td-d)>0.01) return false;
+        sum+=d;
+      }
+      if(Math.abs(sum-target)>0.01) return false;
+    }
+    return true;
+  }
+
+  function tabletList(c){
+    var arr=[],i;
+    for(i=0;i<c.f5;i++) arr.push({s:5,half:false});
+    if(c.h5) arr.push({s:5,half:true});
+    for(i=0;i<c.f3;i++) arr.push({s:3,half:false});
+    if(c.h3) arr.push({s:3,half:true});
+    for(i=0;i<c.f2;i++) arr.push({s:2,half:false});
+    if(c.h2) arr.push({s:2,half:true});
+    return arr;
+  }
+  function tabHTML(t){return '<span class="tab t'+t.s+(t.half?' half':'')+'">'+t.s+(t.half?'<i class="hf">½</i>':'')+'</span>';}
+  function fmt(n){return (Math.round(n*10)/10).toString();}
+
+  function renderOption(plan, idx){
+    var arranged=arrange(plan.ms);
+    var dayNames=['จ','อ','พ','พฤ','ศ','ส','อา'];
+    var isBest=(idx===0);
+    var titles=['สม่ำเสมอ · ใช้ง่าย','ใช้จำนวนเม็ดน้อย','ทางเลือกเพิ่มเติม'];
+    var html='<div class="opt '+(isBest?'best':'alt')+'">';
+    html+='<div class="opt-head"><div class="onum">'+(idx+1)+'</div>';
+    html+='<div class="otitle">'+titles[idx]+'</div>';
+    if(isBest) html+='<span class="badge b-best">แนะนำ</span>';
+    html+='<span class="badge '+(plan.usesHalf?'b-half':'b-full')+'">'+(plan.usesHalf?'มีการแบ่งครึ่งเม็ด':'เต็มเม็ดทั้งหมด')+'</span>';
+    html+='</div>';
+    html+='<div class="week">';
+    var s={f2:0,h2:0,f3:0,h3:0,f5:0,h5:0};
+    for(var i=0;i<7;i++){
+      var c=DMAP[arranged[i].toFixed(1)];
+      s.f2+=c.f2;s.h2+=c.h2;s.f3+=c.f3;s.h3+=c.h3;s.f5+=c.f5;s.h5+=c.h5;
+      html+='<div class="day"><div class="dn">'+dayNames[i]+'</div><div class="tabs">';
+      if(arranged[i]===0){ html+='<span class="skip">งด</span>'; }
+      else { tabletList(c).forEach(function(t){html+=tabHTML(t);}); }
+      html+='</div><div class="dt">'+fmt(arranged[i])+'</div></div>';
+    }
+    html+='</div>';
+    html+='<div class="supply">';
+    [{s:5,full:s.f5,half:s.h5},{s:3,full:s.f3,half:s.h3},{s:2,full:s.f2,half:s.h2}].forEach(function(r){
+      if(r.full===0 && r.half===0) return;
+      var cntTxt='';
+      if(r.full>0) cntTxt+=r.full+' เม็ด';
+      if(r.half>0) cntTxt+=(r.full>0?' + ':'')+r.half+' ครึ่งเม็ด';
+      html+='<div class="sup-row"><span class="tab t'+r.s+'">'+r.s+'</span><span class="nm">วาร์ฟาริน '+r.s+' มก.</span><span class="cnt">'+cntTxt+' <small>/สัปดาห์</small></span></div>';
+    });
+    html+='</div></div>';
+    return html;
+  }
+
+  /* render หนึ่ง panel ของขนาดยา */
+  function renderPanel(weekly, dir, dose){
+    var html='<div class="doseline">';
+    if(dir!==0){
+      html+='<div class="from"><div class="n">'+fmt(weekly)+'</div><div class="l">เดิม (มก./สัปดาห์)</div></div><div class="arrow">→</div>';
+    }
+    html+='<div class="to"><div class="n">'+fmt(dose.target)+'</div><div class="l">มก./สัปดาห์</div></div></div>';
+    if(dir!==0){
+      var up=dose.pct>=0, diff=dose.target-weekly;
+      html+='<div class="pctbar"><span class="pctchip '+(up?'up':'down')+'">'+(up?'▲ +':'▼ ')+dose.pct.toFixed(1)+'%</span><span class="pctnote">('+(diff>=0?'+':'')+fmt(diff)+' มก./สัปดาห์ · เฉลี่ย '+fmt(dose.target/7)+' มก./วัน)</span></div>';
+    } else {
+      html+='<div class="pctbar"><span class="pctchip keep">● คงที่ 0%</span><span class="pctnote">(เฉลี่ย '+fmt(dose.target/7)+' มก./วัน)</span></div>';
+    }
+    html+='<div class="note" style="margin-bottom:12px">ตัวอย่างการจัดยา 3 รูปแบบ — เรียง<b>วิธีเต็มเม็ดก่อน</b> ตามด้วยวิธีที่ต้องแบ่งครึ่งเม็ด</div>';
+    for(var oi=0;oi<dose.options.length;oi++) html+=renderOption(dose.options[oi],oi);
+    return html;
+  }
+
+  function getDecision(inr, lo, hi, bleed){
+    var off=lo-2.0, L15=1.5+off, L19=1.9+off, L39=3.9+off, L49=4.9+off;
+    if(bleed) return {kind:'stop',title:'หยุดยา + แก้ไขด่วน',desc:'มีเลือดออกรุนแรง ต้องแก้ไขภาวะ anticoagulation ทันที',adjust:false,
+      clin:{type:'warn',head:'การจัดการภาวะเลือดออกรุนแรง',items:['หยุดวาร์ฟารินทันที','ให้ Vitamin K₁ 10 มก. ทางหลอดเลือดดำช้า ๆ','ให้ Fresh Frozen Plasma (FFP) หรือ Prothrombin Complex Concentrate หรือ recombinant factor VIIa ตามความรุนแรง','พิจารณาให้ Vitamin K₁ ซ้ำได้ทุก 12 ชั่วโมง','ปรึกษาแพทย์ผู้เชี่ยวชาญ / รับไว้ในโรงพยาบาล']},
+      follow:'ติดตาม INR อย่างใกล้ชิด'};
+    if(inr<L15) return {kind:'up',title:'เพิ่มขนาดยา',desc:'INR ต่ำกว่าเป้าหมายมาก',pctLow:10,pctHigh:20,adjust:true,dir:1,
+      follow:'ตรวจ INR ซ้ำใน 1 สัปดาห์ — หากเสี่ยง thromboembolism สูง ควรตรวจถี่ขึ้น'};
+    if(inr<L19+1e-9) return {kind:'up',title:'เพิ่มขนาดยาเล็กน้อย',desc:'INR ต่ำกว่าเป้าหมายเล็กน้อย',pctLow:5,pctHigh:10,adjust:true,dir:1,
+      follow:'อาจเพิ่มยา 5–10% หรือยังไม่ปรับแต่ติดตาม INR ถี่ขึ้น',note:'หาก INR อยู่นอกช่วงไม่มากและไม่มีสาเหตุชัดเจน อาจติดตามค่าซ้ำก่อนปรับยา'};
+    if(inr<=hi+1e-9) return {kind:'keep',title:'คงขนาดยาเดิม',desc:'INR อยู่ในช่วงเป้าหมาย ✓',pctLow:0,pctHigh:0,adjust:true,dir:0,
+      follow:'หาก INR คงที่สม่ำเสมอ ตรวจซ้ำได้ทุก 4 สัปดาห์'};
+    if(inr<L39+1e-9) return {kind:'down',title:'ลดขนาดยาเล็กน้อย',desc:'INR สูงกว่าเป้าหมายเล็กน้อย',pctLow:5,pctHigh:10,adjust:true,dir:-1,
+      follow:'ตรวจ INR ซ้ำใน 1 สัปดาห์',note:'หาก INR อยู่นอกช่วงไม่มากและไม่มีสาเหตุชัดเจน อาจติดตามค่าซ้ำก่อนปรับยา'};
+    if(inr<L49+1e-9) return {kind:'hold',title:'หยุดยา 1 วัน แล้วลดขนาด',desc:'INR สูงกว่าเป้าหมายปานกลาง',pctLow:10,pctHigh:10,adjust:true,dir:-1,holdDays:1,
+      follow:'ติดตาม INR จนกลับเข้าช่วงรักษา จึงเริ่มยาใหม่ที่ขนาดลดลง'};
+    if(inr<9.0) return {kind:'hold',title:'หยุดยา 1–2 มื้อ + Vitamin K₁',desc:'INR 5.0–8.9 (ไม่มีเลือดออก)',adjust:false,reduceHint:20,
+      clin:{type:'amber',head:'แนวทางจัดการ INR 5.0–8.9 (ไม่มีเลือดออก)',items:['หยุดวาร์ฟาริน 1–2 มื้อ (ตามเอกสาร: หยุด 2 วัน แล้วติดตามใกล้ชิด)','พิจารณาให้ Vitamin K₁ 1 มก. ชนิดรับประทาน','หากเสี่ยงเลือดออกง่าย: Vitamin K₁ 1–2.5 มก. รับประทาน','หากต้องแก้ไขเร่งด่วน (เช่น ต้องผ่าตัด): Vitamin K₁ 2.5–5 มก. รับประทาน','เริ่มยาใหม่ที่ขนาดต่ำลง ~20% ของขนาดต่อสัปดาห์เดิม']},
+      follow:'ติดตาม INR อย่างใกล้ชิดจนกลับเข้าช่วงรักษา'};
+    return {kind:'stop',title:'หยุดยา + Vitamin K₁',desc:'INR ≥ 9.0 (ไม่มีเลือดออก)',adjust:false,
+      clin:{type:'warn',head:'แนวทางจัดการ INR ≥ 9.0 (ไม่มีเลือดออก)',items:['หยุดวาร์ฟาริน','ให้ Vitamin K₁ 2.5–5 มก. ชนิดรับประทาน','ติดตาม INR อย่างใกล้ชิด คาดว่ากลับเข้าช่วงรักษาใน 24–48 ชม.','หาก INR ยังสูง อาจให้ Vitamin K₁ 1–2 มก. รับประทานซ้ำ','เริ่มยาใหม่ที่ขนาดต่ำลงเมื่อ INR เข้าช่วงรักษา']},
+      follow:'ติดตาม INR ทุก 24 ชม.'};
+  }
+
+  function svgWarn(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 3h.01M10.3 3.9 2.4 17.5A2 2 0 0 0 4.1 20.5h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
+
+  function render(){
+    var inr=parseFloat(document.getElementById('inr').value);
+    var weekly=parseFloat(document.getElementById('weekly').value);
+    var bleed=document.getElementById('bleed').checked;
+    var seg=document.querySelector('#targetSeg .active');
+    var lo=parseFloat(seg.dataset.lo), hi=parseFloat(seg.dataset.hi);
+    var res=document.getElementById('result');
+
+    /* (4) ตรวจสอบ input ก่อนเสมอ */
+    var v=validateInputs(inr,weekly,bleed);
+    if(!v.ok){
+      var eh='<div class="msgbox err">'+svgWarn()+'<div><b>ไม่สามารถคำนวณได้ — โปรดตรวจสอบข้อมูล</b><ul>';
+      v.errors.forEach(function(e){eh+='<li>'+e+'</li>';});
+      eh+='</ul></div></div>';
+      res.innerHTML=eh; res.classList.add('show');
+      setTimeout(function(){res.scrollIntoView({behavior:'smooth',block:'start'});},80);
+      return;
+    }
+
+    var d=getDecision(inr,lo,hi,bleed), html='';
+    if(v.warnings.length){
+      html+='<div class="msgbox warn">'+svgWarn()+'<div><b>โปรดตรวจสอบความถูกต้อง</b><ul>';
+      v.warnings.forEach(function(w){html+='<li>'+w+'</li>';});
+      html+='</ul></div></div>';
+    }
+
+    var vClass={up:'v-up',keep:'v-keep',down:'v-down',hold:'v-hold',stop:'v-stop'}[d.kind];
+    html+='<div class="verdict '+vClass+'"><div class="tag">INR '+fmt(inr)+' • เป้าหมาย '+lo.toFixed(1)+'–'+hi.toFixed(1)+'</div><div class="big">'+d.title+'</div><div class="desc">'+d.desc+'</div></div>';
+
+    if(d.adjust && !isNaN(weekly)){
+      var doses=recommendDoses(weekly,d.dir,d.pctLow,d.pctHigh);
+      // คำนวณ options + ตรวจสอบความถูกต้อง (verify) ก่อนแสดง
+      doses=doses.map(function(dd){dd.options=pick3(dd.target);return dd;})
+                 .filter(function(dd){return verifyDosing(dd.target,dd.options);});
+
+      var critLabel = d.dir===0?'คงขนาดเดิม'
+        : (d.dir>0?'เพิ่ม ':'ลด ')+d.pctLow+(d.pctLow!==d.pctHigh?'–'+d.pctHigh:'')+'%';
+
+      html+='<div class="card">';
+      html+='<div class="card-head"><div class="ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3 8-8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h2>ขนาดยาที่แนะนำ</h2><span>เกณฑ์แนวทาง: '+critLabel+(doses.length>1?' · เลือกได้ '+doses.length+' ขนาด':'')+'</span></div></div>';
+
+      if(!doses.length){
+        html+='<div class="msgbox err" style="margin:0">'+svgWarn()+'<div>ไม่สามารถคำนวณรูปแบบยาที่ถูกต้องสำหรับขนาดนี้ได้ โปรดตรวจสอบขนาดยาเดิมอีกครั้ง</div></div>';
+      } else {
+        if(d.holdDays) html+='<div class="clin warn" style="margin-top:0;margin-bottom:14px"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>หยุดยา '+d.holdDays+' วันก่อน</h3>งดวาร์ฟาริน '+d.holdDays+' วัน แล้วติดตาม INR จนเข้าช่วงรักษา จึงเริ่มแผนด้านล่าง</div>';
+
+        // (1) แท็บเลือกหลายขนาดยา
+        var activeIdx=0; doses.forEach(function(dd,ix){if(dd.recommended)activeIdx=ix;});
+        if(doses.length>1){
+          html+='<div class="dose-tabs">';
+          doses.forEach(function(dd,ix){
+            html+='<button type="button" class="dtab'+(ix===activeIdx?' active':'')+'" data-i="'+ix+'">'+fmt(dd.target)+' มก.<small>'+(dd.pct>=0?'+':'')+dd.pct.toFixed(1)+'%</small>'+(dd.recommended?'<span class="star">แนะนำ</span>':'')+'</button>';
+          });
+          html+='</div>';
+        }
+
+        html+='<div class="legend"><span class="pl"><span class="tab t2">2</span>2 มก. (ส้ม)</span><span class="pl"><span class="tab t3">3</span>3 มก. (ฟ้า)</span><span class="pl"><span class="tab t5">5</span>5 มก. (ชมพู)</span></div>';
+
+        doses.forEach(function(dd,ix){
+          html+='<div class="dose-panel" data-i="'+ix+'"'+(ix===activeIdx?'':' style="display:none"')+'>'+renderPanel(weekly,d.dir,dd)+'</div>';
+        });
+      }
+      html+='</div>';
+    }
+
+    if(d.clin){
+      var icon=d.clin.type==='warn'?svgWarn():'<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 8v5m0 3h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+      html+='<div class="card"><div class="clin '+d.clin.type+'" style="margin-top:0"><h3>'+icon+d.clin.head+'</h3><ul>';
+      for(var j=0;j<d.clin.items.length;j++) html+='<li>'+d.clin.items[j]+'</li>';
+      html+='</ul></div>';
+      if(d.reduceHint && !isNaN(weekly)){
+        var rdoses=recommendDoses(weekly,-1,d.reduceHint,d.reduceHint).map(function(dd){dd.options=pick3(dd.target);return dd;}).filter(function(dd){return verifyDosing(dd.target,dd.options);});
+        var rd=rdoses.length?rdoses[0]:null;
+        if(rd) html+='<div class="clin"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3 8-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>ขนาดเมื่อเริ่มยาใหม่</h3>จาก <b>'+fmt(weekly)+'</b> → <b style="color:var(--green-700)">'+fmt(rd.target)+' มก./สัปดาห์</b> ('+rd.pct.toFixed(1)+'% · เฉลี่ย '+fmt(rd.target/7)+' มก./วัน) เมื่อ INR กลับเข้าช่วงรักษา</div>';
+      }
+      html+='</div>';
+    }
+
+    if(d.note) html+='<div class="card" style="padding:14px 16px"><div style="display:flex;gap:9px;font-size:.88rem;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex:none;margin-top:2px"><circle cx="12" cy="12" r="9" stroke="#586a64" stroke-width="1.5"/><path d="M12 8v5m0 3h.01" stroke="#586a64" stroke-width="1.5" stroke-linecap="round"/></svg><span>'+d.note+'</span></div></div>';
+
+    if(d.follow) html+='<div class="card" style="padding:14px 16px"><div class="followup" style="display:flex;align-items:center;gap:11px"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M8 2v4M16 2v4M9 14l2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span style="font-size:.9rem"><b style="color:var(--green-800)">การติดตาม:</b> '+d.follow+'</span></div></div>';
+
+    if(inr<lo||inr>hi){
+      html+='<div class="card causes"><div class="ct">⚠️ ก่อนปรับยา — ตรวจสอบสาเหตุที่ทำให้ INR ผิดปกติ</div><div class="chip-wrap">'
+        +'<span class="chip">ความผิดพลาดการตรวจ</span><span class="chip">อาหารวิตามินเค เปลี่ยน</span><span class="chip">การดื่มแอลกอฮอล์</span><span class="chip">ยาที่ใช้ร่วม</span><span class="chip">กินยาไม่สม่ำเสมอ/ผิดขนาด</span><span class="chip">การติดเชื้อ / ไข้</span><span class="chip">อุจจาระร่วง</span><span class="chip">Paracetamol, NSAIDs, ยาปฏิชีวนะ</span></div></div>';
+    }
+
+    res.innerHTML=html;
+    res.classList.add('show');
+    // ผูก event แท็บเลือกขนาดยา
+    var tabs=res.querySelectorAll('.dtab');
+    tabs.forEach(function(t){
+      t.addEventListener('click',function(){
+        var i=t.dataset.i;
+        res.querySelectorAll('.dtab').forEach(function(x){x.classList.remove('active');});
+        t.classList.add('active');
+        res.querySelectorAll('.dose-panel').forEach(function(p){p.style.display=(p.dataset.i===i)?'':'none';});
+      });
+    });
+    setTimeout(function(){res.scrollIntoView({behavior:'smooth',block:'start'});},80);
+  }
+
+  document.getElementById('calcBtn').addEventListener('click',render);
+  var seg=document.querySelectorAll('#targetSeg button');
+  seg.forEach(function(b){b.addEventListener('click',function(){seg.forEach(function(x){x.classList.remove('active');});b.classList.add('active');});});
+  var bleedCb=document.getElementById('bleed'), bleedBox=document.getElementById('bleedToggle');
+  bleedCb.addEventListener('change',function(){bleedBox.style.background=bleedCb.checked?'#f7d9cf':'';});
+  document.querySelectorAll('input[type=number]').forEach(function(el){el.addEventListener('keydown',function(e){if(e.key==='Enter')render();});});
+})();
+</script>
+</body>
+</html>

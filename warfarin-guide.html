@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คู่มือยาวาร์ฟาริน (Warfarin) สำหรับผู้ป่วย</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF4EF;
+    --bg-grad:#E4EEE7;
+    --surface:#FFFFFF;
+    --surface-soft:#F6FAF7;
+    --ink:#16261F;
+    --ink-soft:#46584F;
+    --line:#DCE7DF;
+    --g-900:#0E3B2C;
+    --g-800:#15523D;
+    --g-700:#1C6B4F;
+    --g-600:#268666;
+    --g-500:#33A079;
+    --g-100:#D9ECE1;
+    --g-50:#EAF4EE;
+    --gold:#B68A3E;
+    --gold-soft:#F3EAD6;
+    --danger:#B23A36;
+    --danger-soft:#FBEDEC;
+    --warn:#C6892B;
+    --warn-soft:#FBF1DF;
+    --info:#2B6FB0;
+    --info-soft:#E9F1FA;
+    --shadow-sm:0 1px 2px rgba(14,59,44,.05),0 2px 8px rgba(14,59,44,.05);
+    --shadow-md:0 4px 14px rgba(14,59,44,.08),0 12px 34px rgba(14,59,44,.07);
+    --radius:22px;
+    --radius-sm:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Sarabun',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 100% -10%,rgba(51,160,121,.10),transparent 60%),
+      radial-gradient(900px 500px at -10% 110%,rgba(28,107,79,.08),transparent 55%),
+      linear-gradient(180deg,var(--bg) 0%,var(--bg-grad) 100%);
+    background-attachment:fixed;
+    min-height:100vh;
+    line-height:1.75;
+    font-size:17px;
+    padding-bottom:78px;
+  }
+  ::selection{background:var(--g-100);color:var(--g-900);}
+
+  /* ---------- HEADER ---------- */
+  header.hero{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg,var(--g-900) 0%,var(--g-800) 48%,var(--g-700) 100%);
+    color:#fff;
+    padding:48px 22px 30px;
+    border-radius:0 0 34px 34px;
+    box-shadow:var(--shadow-md);
+  }
+  header.hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(420px 220px at 88% 8%,rgba(255,255,255,.14),transparent 70%),
+      radial-gradient(300px 300px at 6% 96%,rgba(51,160,121,.45),transparent 70%);
+    pointer-events:none;
+  }
+  .hero-leaf{position:absolute;right:-30px;top:-26px;width:230px;height:230px;opacity:.10;transform:rotate(8deg);}
+  .hero-inner{position:relative;max-width:1040px;margin:0 auto;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    font-weight:500;color:#BFE5D2;
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.18);
+    padding:6px 14px;border-radius:999px;backdrop-filter:blur(4px);
+  }
+  .hero h1{
+    font-family:'Sarabun',sans-serif;font-weight:700;
+    font-size:clamp(30px,6vw,46px);line-height:1.12;
+    margin:16px 0 8px;letter-spacing:.5px;
+  }
+  .hero h1 span{color:#9FE0BE;}
+  .hero p.sub{font-size:clamp(15px,2.6vw,18px);color:#D6EBDF;max-width:640px;font-weight:300;}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .hero-meta .chip{
+    display:inline-flex;align-items:center;gap:7px;
+    background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);
+    padding:8px 13px;border-radius:12px;font-size:13.5px;color:#E5F3EB;
+  }
+  .hero-meta .chip svg{width:16px;height:16px;flex:none;}
+
+  /* ---------- NAV TABS ---------- */
+  nav.tabs{
+    position:sticky;top:0;z-index:50;
+    background:rgba(238,244,239,.86);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    padding:10px 14px;
+  }
+  .tabs-inner{
+    max-width:1040px;margin:0 auto;
+    display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
+  }
+  .tabs-inner::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:none;cursor:pointer;border:1px solid var(--line);
+    background:var(--surface);color:var(--ink-soft);
+    font-family:inherit;font-size:14.5px;font-weight:500;
+    padding:11px 17px;border-radius:14px;
+    display:inline-flex;align-items:center;gap:9px;
+    transition:.22s ease;white-space:nowrap;
+  }
+  .tab-btn svg{width:18px;height:18px;flex:none;transition:.22s;}
+  .tab-btn:hover{border-color:var(--g-500);color:var(--g-700);transform:translateY(-1px);}
+  .tab-btn.active{
+    background:linear-gradient(135deg,var(--g-700),var(--g-600));
+    color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(28,107,79,.28);
+  }
+  .tab-btn.active svg{stroke:#fff;}
+  .tab-num{
+    font-size:11.5px;font-weight:600;width:20px;height:20px;border-radius:7px;
+    display:grid;place-items:center;background:var(--g-50);color:var(--g-700);
+  }
+  .tab-btn.active .tab-num{background:rgba(255,255,255,.22);color:#fff;}
+
+  /* ---------- LAYOUT ---------- */
+  main{max-width:1040px;margin:0 auto;padding:28px 18px 40px;}
+  .panel{display:none;animation:fade .5s ease both;}
+  .panel.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @keyframes rise{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+
+  .section-head{display:flex;align-items:center;gap:14px;margin:6px 0 22px;}
+  .section-head .badge{
+    width:50px;height:50px;flex:none;border-radius:16px;
+    display:grid;place-items:center;color:#fff;
+    background:linear-gradient(135deg,var(--g-700),var(--g-500));
+    box-shadow:0 8px 18px rgba(28,107,79,.25);
+  }
+  .section-head .badge svg{width:26px;height:26px;}
+  .section-head h2{font-family:'Sarabun',sans-serif;font-weight:700;font-size:clamp(22px,4vw,30px);color:var(--g-900);line-height:1.3;}
+  .section-head p{font-size:14px;color:var(--ink-soft);}
+
+  /* ---------- CARDS ---------- */
+  .grid{display:grid;gap:16px;}
+  .grid-2{grid-template-columns:repeat(2,1fr);}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  @media(max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);padding:22px 22px;
+    box-shadow:var(--shadow-sm);transition:.25s ease;
+    animation:rise .5s ease both;
+  }
+  .card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:#CDE2D4;}
+  .card.lead{border-left:5px solid var(--g-600);}
+  .card-ico{
+    width:46px;height:46px;border-radius:13px;display:grid;place-items:center;
+    background:var(--g-50);color:var(--g-700);margin-bottom:14px;
+  }
+  .card-ico svg{width:24px;height:24px;}
+  .card h3{font-family:'Sarabun',sans-serif;font-weight:700;font-size:20px;color:var(--g-900);margin-bottom:8px;line-height:1.4;}
+  .card p{color:var(--ink-soft);font-size:16.5px;}
+  .card p+p{margin-top:9px;}
+  .card .hl{color:var(--g-700);font-weight:600;}
+
+  ul.tick{list-style:none;display:flex;flex-direction:column;gap:11px;margin-top:6px;}
+  ul.tick li{display:flex;gap:11px;align-items:flex-start;font-size:16.5px;color:var(--ink-soft);}
+  ul.tick li svg{width:21px;height:21px;flex:none;margin-top:2px;}
+  ul.tick li b{color:var(--ink);font-weight:600;}
+
+  /* group / pill list */
+  .pillrow{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px;}
+  .pill{
+    background:var(--g-50);color:var(--g-800);border:1px solid var(--g-100);
+    padding:9px 15px;border-radius:11px;font-size:15px;font-weight:500;
+    display:inline-flex;align-items:center;gap:7px;
+  }
+  .pill svg{width:16px;height:16px;}
+
+  /* ---------- TABLES ---------- */
+  .table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow-sm);}
+  table{border-collapse:collapse;width:100%;min-width:480px;font-size:16px;}
+  thead th{
+    background:linear-gradient(135deg,var(--g-800),var(--g-700));color:#fff;
+    text-align:left;padding:14px 16px;font-weight:600;font-size:15px;letter-spacing:.01em;
+  }
+  thead th:first-child{border-top-left-radius:var(--radius-sm);}
+  thead th:last-child{border-top-right-radius:var(--radius-sm);}
+  tbody td{padding:14px 16px;border-top:1px solid var(--line);color:var(--ink-soft);vertical-align:top;}
+  tbody tr:nth-child(even){background:var(--surface-soft);}
+  tbody td b{color:var(--ink);}
+  .tag{display:inline-block;padding:4px 11px;border-radius:8px;font-size:13.5px;font-weight:600;}
+  .tag.green{background:var(--g-50);color:var(--g-700);}
+  .tag.red{background:var(--danger-soft);color:var(--danger);}
+  .tag.amber{background:var(--warn-soft);color:var(--warn);}
+  .tag.blue{background:var(--info-soft);color:var(--info);}
+
+  /* ---------- BANNERS ---------- */
+  .banner{
+    display:flex;gap:14px;border-radius:var(--radius-sm);padding:16px 18px;margin-top:4px;
+    animation:rise .5s ease both;
+  }
+  .banner svg{width:24px;height:24px;flex:none;margin-top:1px;}
+  .banner .b-body{font-size:16px;}
+  .banner .b-body strong{display:block;margin-bottom:3px;font-size:16.5px;}
+  .banner.danger{background:var(--danger-soft);border:1px solid #F0CFCD;color:#7A2C29;}
+  .banner.danger svg{color:var(--danger);}
+  .banner.warn{background:var(--warn-soft);border:1px solid #EFD9AD;color:#7A5817;}
+  .banner.warn svg{color:var(--warn);}
+  .banner.info{background:var(--info-soft);border:1px solid #CFE0F1;color:#274E72;}
+  .banner.info svg{color:var(--info);}
+  .banner.green{background:var(--g-50);border:1px solid var(--g-100);color:var(--g-900);}
+  .banner.green svg{color:var(--g-700);}
+
+  /* INR scale */
+  .inr-scale{display:flex;border-radius:13px;overflow:hidden;margin-top:14px;border:1px solid var(--line);font-size:13.5px;font-weight:600;text-align:center;color:#fff;}
+  .inr-scale div{padding:13px 8px;flex:1;}
+  .inr-scale .low{background:#C6892B;}
+  .inr-scale .ok{background:var(--g-600);}
+  .inr-scale .high{background:var(--danger);}
+  .inr-scale small{display:block;font-weight:400;opacity:.92;font-size:12px;margin-top:2px;}
+
+  /* two-col compare (increase/decrease) */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:760px){.compare{grid-template-columns:1fr;}}
+  .cmp-head{display:flex;align-items:center;gap:11px;margin-bottom:14px;}
+  .cmp-head .ci{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none;}
+  .cmp-head h3{font-family:'Sarabun',sans-serif;font-weight:700;font-size:19px;line-height:1.3;}
+  .cmp-head small{font-size:12.5px;font-weight:500;letter-spacing:.03em;}
+  .card.up{border-top:4px solid var(--danger);}
+  .card.up .ci{background:var(--danger-soft);color:var(--danger);}
+  .card.up h3{color:var(--danger);}
+  .card.down{border-top:4px solid var(--warn);}
+  .card.down .ci{background:var(--warn-soft);color:var(--warn);}
+  .card.down h3{color:#8a6014;}
+
+  .section-sub{font-family:'Sarabun',sans-serif;font-size:19px;color:var(--g-900);font-weight:700;margin:30px 0 14px;display:flex;align-items:center;gap:10px;}
+  .section-sub svg{width:21px;height:21px;color:var(--g-600);}
+  .stack{display:flex;flex-direction:column;gap:16px;}
+
+  /* ---------- BOTTOM NAV (mobile) ---------- */
+  .bottom-nav{
+    position:fixed;bottom:0;left:0;right:0;z-index:60;
+    background:rgba(255,255,255,.93);backdrop-filter:blur(14px);
+    border-top:1px solid var(--line);
+    display:none;justify-content:space-around;padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+  }
+  .bn-btn{
+    flex:1;border:none;background:none;font-family:inherit;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    color:var(--ink-soft);font-size:11px;font-weight:500;padding:5px 2px;border-radius:12px;
+  }
+  .bn-btn svg{width:22px;height:22px;}
+  .bn-btn.active{color:var(--g-700);}
+  .bn-btn.active svg{stroke:var(--g-700);}
+  @media(max-width:760px){
+    .bottom-nav{display:flex;}
+    body{padding-bottom:84px;}
+    .card{padding:18px;}
+  }
+
+  footer{max-width:1040px;margin:0 auto;padding:8px 18px 30px;text-align:center;color:var(--ink-soft);font-size:13px;}
+  footer .disc{background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:16px;margin-bottom:14px;text-align:left;display:flex;gap:11px;}
+  footer .disc svg{width:20px;height:20px;flex:none;color:var(--g-600);margin-top:2px;}
+  .topbtn{cursor:pointer;color:var(--g-700);font-weight:500;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg class="hero-leaf" viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.34 1.34.34C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg>
+  <div class="hero-inner">
+    <span class="eyebrow">คู่มือสำหรับผู้ป่วย · Patient Guide</span>
+    <h1>ยาวาร์ฟาริน <span>(Warfarin)</span><br>รู้ให้ลึก ใช้ให้ปลอดภัย</h1>
+    <p class="sub">ความรู้เรื่องยาต้านการแข็งตัวของเลือด การดูแลตัวเอง อาหารและปัจจัยที่มีผลต่อค่า INR เพื่อการรักษาที่ได้ผลและปลอดภัยที่สุด</p>
+    <div class="hero-meta">
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20" stroke-linecap="round"/></svg> ยาต้านการแข็งตัวของเลือด</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg> ติดตามด้วยค่า INR</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> ใช้ยาอย่างถูกวิธี</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-inner" id="tabs">
+    <button class="tab-btn active" data-tab="0"><span class="tab-num">1</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 2a3 3 0 0 0-3 3v1H7a3 3 0 0 0 0 6h2v1H7a3 3 0 0 0 0 6h2v1a3 3 0 0 0 6 0v-1h2a3 3 0 0 0 0-6h-2v-1h2a3 3 0 0 0 0-6h-2V5a3 3 0 0 0-3-3z"/></svg>ข้อมูลยาวาร์ฟาริน</button>
+    <button class="tab-btn" data-tab="1"><span class="tab-num">2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>คำแนะนำและการปฏิบัติตัว</button>
+    <button class="tab-btn" data-tab="2"><span class="tab-num">3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg>อาหารและปัจจัยเสี่ยง</button>
+    <button class="tab-btn" data-tab="3"><span class="tab-num">4</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>ข้อควรระวังและข้อห้ามใช้</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ PANEL 1 : ข้อมูลยา ============ -->
+<section class="panel active" data-panel="0">
+  <div class="section-head">
+    <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 2a3 3 0 0 0-3 3v1H7a3 3 0 0 0 0 6h2v1H7a3 3 0 0 0 0 6h2v1a3 3 0 0 0 6 0v-1h2a3 3 0 0 0 0-6h-2v-1h2a3 3 0 0 0 0-6h-2V5a3 3 0 0 0-3-3z"/></svg></div>
+    <div><h2>ข้อมูลยาวาร์ฟาริน</h2><p>ยาคืออะไร · ทำไมต้องกิน · ใครต้องกิน · การติดตามผลการรักษา</p></div>
+  </div>
+
+  <div class="card lead">
+    <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01" stroke-linecap="round"/></svg></div>
+    <h3>1. ยาวาร์ฟารินคืออะไร</h3>
+    <p>วาร์ฟาริน (Warfarin) เป็น <span class="hl">ยาต้านการแข็งตัวของเลือด (Anticoagulant)</span> ในกลุ่มที่ออกฤทธิ์ต้านวิตามินเค ทำหน้าที่ยับยั้งการสร้างปัจจัยการแข็งตัวของเลือดในตับที่ต้องอาศัยวิตามินเค ส่งผลให้เลือดแข็งตัวช้าลง</p>
+    <p>ยานี้ <span class="hl">ป้องกันไม่ให้เกิดลิ่มเลือดก้อนใหม่ หรือป้องกันลิ่มเลือดเดิมไม่ให้ใหญ่ขึ้น</span> แต่ไม่ได้ "ละลาย" ลิ่มเลือดที่มีอยู่แล้วโดยตรง จึงเป็นยาที่ต้องใช้ต่อเนื่องและควบคุมขนาดอย่างใกล้ชิด</p>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:16px;">
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <h3>2. ทำไมต้องกินยาวาร์ฟาริน</h3>
+      <p>เพื่อ<span class="hl">ป้องกันลิ่มเลือดอุดตัน</span> ที่อาจหลุดไปอุดหลอดเลือดในอวัยวะสำคัญ ซึ่งอาจก่อให้เกิดภาวะร้ายแรง เช่น</p>
+      <ul class="tick">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.2"><path d="M5 12h14" stroke-linecap="round"/></svg><span>อัมพฤกษ์ / อัมพาตจากลิ่มเลือดอุดหลอดเลือดสมอง (Stroke)</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.2"><path d="M5 12h14" stroke-linecap="round"/></svg><span>ลิ่มเลือดอุดตันที่ปอด (Pulmonary embolism)</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.2"><path d="M5 12h14" stroke-linecap="round"/></svg><span>ลิ่มเลือดอุดตันหลอดเลือดดำส่วนลึกที่ขา (DVT)</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <h3>3. ผู้ป่วยกลุ่มใดบ้างที่ต้องกินยา</h3>
+      <p>แพทย์มักสั่งยาวาร์ฟารินในผู้ป่วยที่มีความเสี่ยงต่อการเกิดลิ่มเลือด เช่น</p>
+      <div class="pillrow">
+        <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 12h4l2 6 4-12 2 6h6"/></svg>หัวใจเต้นผิดจังหวะ AF</span>
+        <span class="pill">ผู้ใส่ลิ้นหัวใจเทียมชนิดโลหะ</span>
+        <span class="pill">มีลิ่มเลือด DVT / PE</span>
+        <span class="pill">ลิ่มเลือดในห้องหัวใจ</span>
+        <span class="pill">ภาวะเลือดแข็งตัวง่ายผิดปกติ</span>
+        <span class="pill">บางรายหลังผ่าตัดเปลี่ยนข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>4. ผลการติดตามการรักษา (Therapeutic Monitoring)</div>
+
+  <div class="card lead">
+    <p>การรักษาด้วยวาร์ฟารินต้องตรวจเลือดดูค่า <span class="hl">INR (International Normalized Ratio)</span> อย่างสม่ำเสมอ เพื่อปรับขนาดยาให้เลือดแข็งตัวช้าลง "พอดี" ไม่มากหรือน้อยเกินไป</p>
+    <div class="inr-scale">
+      <div class="low">INR ต่ำ (&lt; 2.0)<small>เลือดข้น เสี่ยงลิ่มเลือด</small></div>
+      <div class="ok">เป้าหมาย 2.0 – 3.0<small>ระดับที่ปลอดภัย</small></div>
+      <div class="high">INR สูง (&gt; เป้าหมาย)<small>เสี่ยงเลือดออก</small></div>
+    </div>
+    <p style="margin-top:14px;font-size:14px;">* ช่วงเป้าหมายอาจแตกต่างกันในแต่ละโรค เช่น ผู้ใส่ลิ้นหัวใจเทียมโลหะบางชนิดอาจตั้งเป้า INR 2.5 – 3.5 โดยแพทย์เป็นผู้กำหนดเฉพาะราย</p>
+  </div>
+
+  <div class="table-wrap" style="margin-top:16px;">
+    <table>
+      <thead><tr><th>ค่า INR</th><th>ความหมาย</th><th>สิ่งที่ควรทำ</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag amber">ต่ำกว่าเป้าหมาย</span></td><td>เลือดแข็งตัวเร็วเกินไป เสี่ยงเกิดลิ่มเลือด</td><td>พบแพทย์ตามนัด อาจต้องปรับเพิ่มขนาดยา ห้ามปรับเอง</td></tr>
+        <tr><td><span class="tag green">อยู่ในเป้าหมาย</span></td><td>ระดับยาเหมาะสม ปลอดภัย</td><td>กินยาขนาดเดิมต่อเนื่อง ตรวจตามนัด</td></tr>
+        <tr><td><span class="tag red">สูงกว่าเป้าหมาย</span></td><td>เลือดแข็งตัวช้าเกินไป เสี่ยงเลือดออก</td><td>เฝ้าระวังภาวะเลือดออก ติดต่อ/พบแพทย์ ปรับยาตามคำสั่งแพทย์</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="banner green" style="margin-top:16px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M19.1 4.9l-2.8 2.8M7.7 16.3l-2.8 2.8"/></svg>
+    <div class="b-body"><strong>เคล็ดลับ</strong>ควรพกสมุดบันทึก/บัตรประจำตัวผู้ใช้ยาวาร์ฟาริน บันทึกค่า INR และขนาดยาแต่ละครั้งไว้ เพื่อติดตามแนวโน้มการรักษาของตนเอง</div>
+  </div>
+</section>
+
+<!-- ============ PANEL 2 : คำแนะนำและการปฏิบัติตัว ============ -->
+<section class="panel" data-panel="1">
+  <div class="section-head">
+    <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+    <div><h2>คำแนะนำและการปฏิบัติตัว</h2><p>วิธีใช้ยา · การลืมกินยา · การดูแลตัวเองในชีวิตประจำวัน</p></div>
+  </div>
+
+  <div class="section-sub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>5. คำแนะนำการใช้ยาวาร์ฟาริน</div>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg></div>
+      <h3>กินยาให้เป็นเวลา</h3>
+      <ul class="tick">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--g-600)" stroke-width="2.4"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>กินยา<b>เวลาเดิมทุกวัน</b> (มักแนะนำช่วงเย็นหรือก่อนนอน) เพื่อความสม่ำเสมอ</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--g-600)" stroke-width="2.4"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>กินยา<b>ตามขนาดที่แพทย์สั่งอย่างเคร่งครัด</b> ห้ามเพิ่ม-ลด-หยุดยาเอง</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--g-600)" stroke-width="2.4"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ยาแต่ละเม็ดมี<b>สี/ความแรงต่างกัน</b> ตรวจสอบให้ถูกต้องทุกครั้งก่อนกิน</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--g-600)" stroke-width="2.4"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>มาตรวจ INR และพบแพทย์ตามนัดทุกครั้ง</b></span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>หากลืมกินยา ทำอย่างไร</h3>
+      <ul class="tick">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--g-600)" stroke-width="2.4"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ถ้านึกได้<b>ภายในวันเดียวกัน</b> ให้กินยาทันทีที่นึกได้</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg><span>ถ้าข้ามมาถึง<b>วันถัดไปแล้ว ห้ามกินยาเพิ่มเป็น 2 เท่า</b> ให้กินขนาดปกติของวันนั้น</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--g-600)" stroke-width="2.4"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>จดบันทึกวันที่ลืม</b> และแจ้งแพทย์/เภสัชกรในนัดถัดไป</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="banner info" style="margin-top:16px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01" stroke-linecap="round"/></svg>
+    <div class="b-body"><strong>แจ้งทุกครั้งว่ากำลังใช้ยาวาร์ฟาริน</strong>เมื่อพบแพทย์ ทันตแพทย์ เภสัชกร หรือก่อนทำหัตถการ/ผ่าตัด/ถอนฟัน ควรแจ้งล่วงหน้าเสมอ เพราะอาจต้องปรับหรือหยุดยาชั่วคราว</div>
+  </div>
+
+  <div class="section-sub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>6. การปฏิบัติตัวที่เหมาะสม</div>
+
+  <div class="grid grid-3">
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h3>ป้องกันการบาดเจ็บ</h3>
+      <p>ระมัดระวังของมีคม ใช้<span class="hl">แปรงสีฟันขนนุ่ม</span> และ<span class="hl">มีดโกนไฟฟ้า</span> หลีกเลี่ยงกีฬาที่เสี่ยงต่อการกระแทกหรือล้ม</p>
+    </div>
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M8 2h8M9 2v3.5a6 6 0 1 0 6 0V2" /><path d="M7 14h10" stroke-linecap="round"/></svg></div>
+      <h3>งด/จำกัดแอลกอฮอล์</h3>
+      <p>การดื่มสุราโดยเฉพาะ<span class="hl">ดื่มหนักเป็นครั้งคราว</span> รบกวนระดับยาและเพิ่มความเสี่ยงเลือดออก ควรงดหรือจำกัดให้น้อยที่สุด</p>
+    </div>
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11 .5-11 5 0 1.5 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"/></svg></div>
+      <h3>ปรึกษาก่อนใช้ยาอื่น</h3>
+      <p><span class="hl">ปรึกษาแพทย์/เภสัชกรทุกครั้ง</span> ก่อนซื้อยา สมุนไพร หรืออาหารเสริม รวมถึงยาแก้ปวดที่หาซื้อเอง</p>
+    </div>
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 12h4l2 6 4-12 2 6h6"/></svg></div>
+      <h3>กินผักให้สม่ำเสมอ</h3>
+      <p><span class="hl">ไม่จำเป็นต้องงดผักใบเขียว</span> แต่ควรกินในปริมาณ<span class="hl">สม่ำเสมอใกล้เคียงกันทุกวัน</span> หลีกเลี่ยงการเปลี่ยนปริมาณกะทันหัน</p>
+    </div>
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke-linecap="round"/></svg></div>
+      <h3>ตรวจตามนัดเสมอ</h3>
+      <p>มาตรวจเลือดดูค่า INR และพบแพทย์<span class="hl">ตามนัดทุกครั้ง</span> เพื่อให้ปรับขนาดยาได้เหมาะสมและปลอดภัย</p>
+    </div>
+    <div class="card">
+      <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20 8.5V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5"/><path d="M16 12h6M19 9l3 3-3 3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>พกบัตรประจำตัวผู้ใช้ยา</h3>
+      <p>พก<span class="hl">บัตร/สมุดประจำตัวผู้ใช้ยาวาร์ฟาริน</span> ติดตัวไว้เสมอ เผื่อกรณีฉุกเฉินบุคลากรทางการแพทย์จะได้ทราบ</p>
+    </div>
+  </div>
+
+  <div class="banner warn" style="margin-top:18px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke-linejoin="round"/></svg>
+    <div class="b-body"><strong>สตรีวัยเจริญพันธุ์ควรคุมกำเนิด</strong>ยาวาร์ฟารินมีผลต่อทารกในครรภ์ หากวางแผนตั้งครรภ์หรือสงสัยว่าตั้งครรภ์ ให้รีบแจ้งแพทย์ทันที ห้ามหยุดยาเอง</div>
+  </div>
+</section>
+
+<!-- ============ PANEL 3 : อาหารและปัจจัยเสี่ยง ============ -->
+<section class="panel" data-panel="2">
+  <div class="section-head">
+    <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><path d="M6 1v3M10 1v3M14 1v3" stroke-linecap="round"/></svg></div>
+    <div><h2>อาหารและปัจจัยเสี่ยง</h2><p>7. สิ่งที่ทำให้ค่า INR เปลี่ยนแปลง — ทั้งเพิ่มและลด</p></div>
+  </div>
+
+  <div class="banner green">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01" stroke-linecap="round"/></svg>
+    <div class="b-body"><strong>หลักสำคัญ: "ความสม่ำเสมอ" คือหัวใจ</strong>คุณไม่จำเป็นต้องงดอาหารทั้งหมด แต่ควรกินในปริมาณ "พอ ๆ กันทุกวัน" การเปลี่ยนพฤติกรรมการกินหรือเริ่ม/หยุดยา–สมุนไพรอย่างกะทันหัน คือสาเหตุที่ทำให้ค่า INR แกว่งบ่อยที่สุด</div>
+  </div>
+
+  <div class="compare" style="margin-top:18px;">
+    <div class="card up">
+      <div class="cmp-head">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h3>ทำให้ INR เพิ่มขึ้น</h3><small>เลือดแข็งตัวช้าลง → เสี่ยงเลือดออกมากขึ้น</small></div>
+      </div>
+      <ul class="tick">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/></svg><span><b>ยาบางชนิด:</b> ยาปฏิชีวนะหลายกลุ่ม, ยาต้านเชื้อรา (เช่น fluconazole), metronidazole, amiodarone</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/></svg><span><b>ยาแก้ปวดกลุ่ม NSAIDs และแอสไพริน:</b> เพิ่มความเสี่ยงเลือดออก</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/></svg><span><b>สมุนไพร:</b> แปะก๊วย (ginkgo), กระเทียมปริมาณสูง, ตังกุย (dong quai), ขิงปริมาณมาก</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/></svg><span><b>การดื่มสุราหนักเป็นครั้งคราว</b> และภาวะเจ็บป่วย เช่น ไข้สูง ท้องเสีย</span></li>
+      </ul>
+    </div>
+
+    <div class="card down">
+      <div class="cmp-head">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M19 12l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h3>ทำให้ INR ลดลง</h3><small>เลือดแข็งตัวเร็วขึ้น → เสี่ยงลิ่มเลือดมากขึ้น</small></div>
+      </div>
+      <ul class="tick">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/></svg><span><b>อาหารวิตามินเคสูง:</b> ผักใบเขียวเข้ม เช่น คะน้า ผักโขม บรอกโคลี ตำลึง (ดูตารางด้านล่าง)</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/></svg><span><b>สมุนไพร:</b> โสม (ginseng), เซนต์จอห์นเวิร์ต (St. John's wort)</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/></svg><span><b>ยาบางชนิด:</b> rifampin, carbamazepine, ยากันชักบางชนิด</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/></svg><span>การ<b>เพิ่มปริมาณผักใบเขียวกะทันหัน</b> อาจดึงค่า INR ให้ต่ำลง</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-sub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M7 13c3.5-2 8.5-2 12 0M5 16c5-3 9-3 14 0M9 10c2-1 4-1 6 0"/></svg>อาหารที่มีวิตามินเคสูง (กินได้ แต่ให้สม่ำเสมอ)</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>กลุ่มอาหาร</th><th>ตัวอย่าง</th><th>ระดับวิตามินเค</th></tr></thead>
+      <tbody>
+        <tr><td><b>ผักใบเขียวเข้ม</b></td><td>คะน้า, ผักโขม, ตำลึง, ผักกาดเขียว, ใบบัวบก</td><td><span class="tag red">สูงมาก</span></td></tr>
+        <tr><td><b>ผักตระกูลกะหล่ำ</b></td><td>บรอกโคลี, กะหล่ำดอก, กะหล่ำดาว, กะหล่ำปลี</td><td><span class="tag red">สูง</span></td></tr>
+        <tr><td><b>ผักสมุนไพร/ผักชนิดอื่น</b></td><td>ผักชี, ใบสะระแหน่, หน่อไม้ฝรั่ง, ถั่วลันเตา</td><td><span class="tag amber">ปานกลาง</span></td></tr>
+        <tr><td><b>เครื่องดื่ม</b></td><td>ชาเขียว (ปริมาณมาก), น้ำผักปั่นเข้มข้น</td><td><span class="tag amber">ปานกลาง</span></td></tr>
+        <tr><td><b>น้ำมัน/อื่น ๆ</b></td><td>น้ำมันถั่วเหลือง, น้ำมันคาโนลา, มายองเนส</td><td><span class="tag green">เล็กน้อย</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="banner info" style="margin-top:16px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01" stroke-linecap="round"/></svg>
+    <div class="b-body"><strong>ไม่ต้องเลิกกินผัก!</strong>ผักมีประโยชน์ต่อสุขภาพ เพียงแค่กิน "ปริมาณคงที่" ทุกวัน หากต้องการเปลี่ยนพฤติกรรมการกินอย่างมีนัยสำคัญ ควรปรึกษาแพทย์หรือเภสัชกรก่อน</div>
+  </div>
+</section>
+
+<!-- ============ PANEL 4 : ข้อควรระวังและข้อห้ามใช้ ============ -->
+<section class="panel" data-panel="3">
+  <div class="section-head">
+    <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke-linejoin="round"/></svg></div>
+    <div><h2>ข้อควรระวังและข้อห้ามใช้</h2><p>8. สิ่งที่ต้องระวัง อาการอันตราย และข้อห้ามใช้ยา</p></div>
+  </div>
+
+  <div class="banner danger">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke-linejoin="round"/></svg>
+    <div class="b-body"><strong>ภาวะเลือดออก คือผลข้างเคียงที่ต้องเฝ้าระวังที่สุด</strong>หากพบอาการผิดปกติเหล่านี้ ให้รีบไปพบแพทย์หรือไปโรงพยาบาลทันที</div>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:16px;">
+    <div class="card up">
+      <div class="cmp-head">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></div>
+        <div><h3>อาการเลือดออกที่ต้องรีบพบแพทย์</h3></div>
+      </div>
+      <ul class="tick">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg><span>เลือดกำเดา หรือเลือดออกตามไรฟันที่หยุดยาก</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg><span><b>ปัสสาวะสีแดง/น้ำตาล</b> หรือ <b>อุจจาระสีดำคล้ายยางมะตอย</b></span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg><span>อาเจียนหรือไอเป็นเลือด</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg><span>มีจ้ำเลือด/รอยช้ำขึ้นเองง่ายผิดปกติ</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg><span>ประจำเดือนมามากผิดปกติ</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg><span>ปวดศีรษะรุนแรงเฉียบพลัน เวียนหัว อ่อนแรง</span></li>
+      </ul>
+    </div>
+
+    <div class="card down">
+      <div class="cmp-head">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2" stroke-linecap="round"/></svg></div>
+        <div><h3>ข้อห้ามใช้ / ควรหลีกเลี่ยง</h3></div>
+      </div>
+      <ul class="tick">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.4"><path d="M5 12h14" stroke-linecap="round"/></svg><span><b>สตรีตั้งครรภ์</b> (โดยเฉพาะไตรมาสแรก) เนื่องจากมีผลต่อทารก</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.4"><path d="M5 12h14" stroke-linecap="round"/></svg><span>ผู้มี<b>ภาวะเลือดออกที่กำลังเป็นอยู่</b> หรือมีความเสี่ยงเลือดออกสูง</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.4"><path d="M5 12h14" stroke-linecap="round"/></svg><span>แผลในกระเพาะอาหาร/ลำไส้ที่กำลังมีเลือดออก</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.4"><path d="M5 12h14" stroke-linecap="round"/></svg><span><b>ความดันโลหิตสูงรุนแรงที่ควบคุมไม่ได้</b></span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.4"><path d="M5 12h14" stroke-linecap="round"/></svg><span>เคย<b>แพ้ยาวาร์ฟาริน</b> หรือส่วนประกอบของยา</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-sub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>กลุ่มที่ต้องใช้ด้วยความระมัดระวังเป็นพิเศษ</div>
+
+  <div class="pillrow" style="gap:11px;">
+    <span class="pill">ผู้สูงอายุ</span>
+    <span class="pill">ผู้มีโรคตับ</span>
+    <span class="pill">ผู้มีโรคไต</span>
+    <span class="pill">ผู้ที่เสี่ยงต่อการหกล้มบ่อย</span>
+    <span class="pill">ผู้ที่ดื่มสุราเป็นประจำ</span>
+    <span class="pill">ผู้ที่ใช้ยาหลายชนิดร่วมกัน</span>
+  </div>
+
+  <div class="banner warn" style="margin-top:18px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 8.5V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5"/><path d="M16 12h6M19 9l3 3-3 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="b-body"><strong>ก่อนผ่าตัด ถอนฟัน หรือทำหัตถการ</strong>ต้องแจ้งทีมแพทย์/ทันตแพทย์ล่วงหน้าเสมอว่ากำลังใช้ยาวาร์ฟาริน เพราะอาจต้องวางแผนหยุดยาหรือปรับยาชั่วคราว ห้ามหยุดยาเองโดยไม่ปรึกษาแพทย์</div>
+  </div>
+</section>
+
+<footer>
+  <div class="disc">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01" stroke-linecap="round"/></svg>
+    <div>ข้อมูลในเว็บไซต์นี้จัดทำขึ้นเพื่อ<b>ให้ความรู้ทั่วไปแก่ผู้ป่วย</b>เท่านั้น ไม่สามารถใช้ทดแทนคำแนะนำของแพทย์ เภสัชกร หรือบุคลากรทางการแพทย์ได้ กรุณาปฏิบัติตามคำสั่งและขนาดยาที่แพทย์กำหนดเฉพาะรายของท่าน หากมีข้อสงสัยให้ปรึกษาเภสัชกรหรือแพทย์ผู้ดูแล</div>
+  </div>
+  <div>คู่มือยาวาร์ฟาริน (Warfarin) สำหรับผู้ป่วย · <span class="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ กลับขึ้นด้านบน</span></div>
+</footer>
+</main>
+
+<!-- bottom nav for mobile -->
+<div class="bottom-nav" id="bnav">
+  <button class="bn-btn active" data-tab="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a3 3 0 0 0-3 3v1H7a3 3 0 0 0 0 6h2v1H7a3 3 0 0 0 0 6h2v1a3 3 0 0 0 6 0v-1h2a3 3 0 0 0 0-6h-2v-1h2a3 3 0 0 0 0-6h-2V5a3 3 0 0 0-3-3z"/></svg>ข้อมูลยา</button>
+  <button class="bn-btn" data-tab="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>คำแนะนำ</button>
+  <button class="bn-btn" data-tab="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><path d="M6 1v3M10 1v3M14 1v3" stroke-linecap="round"/></svg>อาหาร</button>
+  <button class="bn-btn" data-tab="3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke-linejoin="round"/></svg>ข้อควรระวัง</button>
+</div>
+
+<script>
+  const panels=[...document.querySelectorAll('.panel')];
+  const topBtns=[...document.querySelectorAll('#tabs .tab-btn')];
+  const botBtns=[...document.querySelectorAll('#bnav .bn-btn')];
+
+  function go(i){
+    panels.forEach((p,idx)=>p.classList.toggle('active',idx===+i));
+    topBtns.forEach((b)=>b.classList.toggle('active',b.dataset.tab===String(i)));
+    botBtns.forEach((b)=>b.classList.toggle('active',b.dataset.tab===String(i)));
+    // re-trigger card stagger
+    const active=panels[+i];
+    active.querySelectorAll('.card,.banner').forEach((el,k)=>{
+      el.style.animation='none';void el.offsetWidth;
+      el.style.animation=`rise .5s ease both`;el.style.animationDelay=(k*0.05)+'s';
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+    // align active tab into view
+    const at=topBtns.find(b=>b.dataset.tab===String(i));
+    at&&at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  }
+  [...topBtns,...botBtns].forEach(b=>b.addEventListener('click',()=>go(b.dataset.tab)));
+</script>
+</body>
+</html>
