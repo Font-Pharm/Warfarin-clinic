@@ -660,7 +660,8 @@ nav { display: flex; flex-direction: column; gap: 4px; }
     dose:     { src: "warfarin-dose-helper.html",   eyebrow: "คำนวณ · Dosing",        title: "ปรับขนาดยา" }
   };
   var ORDER = ["guide", "calendar", "dose"];
-  var MIN_LOADER_MS = 280;
+  var MIN_LOADER_MS = 180;   // ดีเลย์ขั้นต่ำเพื่อให้ fade ดูนุ่ม
+  var FALLBACK_MS   = 1100;  // กันเหนียว: บังคับเปิด iframe แม้ onload ไม่ยิง (มือถือ/สคริปต์ CDN ช้า)
 
   /* ---- DOM refs ---- */
   var app         = document.getElementById("app");
@@ -673,7 +674,7 @@ nav { display: flex; flex-direction: column; gap: 4px; }
   var scrim       = document.getElementById("scrim");
   var collapseBtn = document.getElementById("collapseBtn");
 
-  var current = null, pending = null, loaderTimer = null;
+  var current = null, pending = null, loaderTimer = null, fallbackTimer = null;
 
   /* ---- Loader helpers ---- */
   function showLoader(label) {
@@ -682,6 +683,20 @@ nav { display: flex; flex-direction: column; gap: 4px; }
     frame.classList.remove("ready");
   }
   function hideLoader() { loader.classList.remove("show"); }
+
+  /*
+    revealFrame — แสดง iframe + ปิดหน้าจอโหลด
+    เรียกซ้ำได้ปลอดภัย (idempotent) จะถูกเรียกโดย "อันไหนมาก่อน":
+      1) frame.onload  (เส้นทางปกติ)
+      2) fallbackTimer (กันเหนียวสำหรับมือถือที่ onload ไม่ยิง)
+  */
+  function revealFrame(key) {
+    if (pending !== key) return;            // มีการกดสลับใหม่ไปแล้ว — ทิ้ง
+    clearTimeout(loaderTimer);
+    clearTimeout(fallbackTimer);
+    hideLoader();
+    frame.classList.add("ready");
+  }
 
   /* ---- Active highlight ---- */
   function setActive(key) {
@@ -706,21 +721,28 @@ nav { display: flex; flex-direction: column; gap: 4px; }
     crumbTitle.textContent = meta.title;
     crumbEye.textContent   = meta.eyebrow;
     showLoader(meta.title);
+    closeMobileNav();           // ปิดลิ้นชักเมนูทันทีบนมือถือ
+
+    /* ล้างตัวจับเวลาเก่าของรอบก่อน */
+    clearTimeout(loaderTimer);
+    clearTimeout(fallbackTimer);
 
     var t0 = Date.now();
+
+    /* เส้นทางปกติ: เปิดเมื่อ iframe โหลดเสร็จ (รักษา fade ให้นุ่ม) */
     frame.onload = function () {
-      if (pending !== key) return; // stale load — a newer request fired
+      if (pending !== key) return;
       var wait = Math.max(0, MIN_LOADER_MS - (Date.now() - t0));
-      clearTimeout(loaderTimer);
-      loaderTimer = setTimeout(function () {
-        hideLoader();
-        frame.classList.add("ready");
-      }, wait);
+      loaderTimer = setTimeout(function () { revealFrame(key); }, wait);
     };
+
+    /* กันเหนียว: บางเบราว์เซอร์บนมือถือไม่ยิง onload ของ iframe
+       (โดยเฉพาะเมื่อหน้าโหลดสคริปต์ CDN ช้า) → บังคับเปิดเองหลัง FALLBACK_MS
+       เนื้อหา HTML ถูก render ไปแล้วก่อนหน้านั้น จึงเห็นทันที */
+    fallbackTimer = setTimeout(function () { revealFrame(key); }, FALLBACK_MS);
 
     frame.src = meta.src + (opts.bust ? "?t=" + Date.now() : "");
     try { localStorage.setItem("wf_portal_active", key); } catch (e) {}
-    closeMobileNav();
   }
 
   /* ---- Sidebar collapse ---- */
